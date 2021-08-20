@@ -12,15 +12,16 @@
             </div>
         </div>
 
-        <ul class="sidebar-menu" data-widget="tree">
-            <li @if (Route::is('dashboard')) class="active" @endif ><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i><span>@lang('site.DASHBOARD')</span></a></li>
+    <ul class="sidebar-menu" data-widget="tree">
+    <li @if (Route::is('dashboard')) class="active" @endif ><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i><span>@lang('site.DASHBOARD')</span></a></li>
 
 
 
 
 {{--  CATEGORIES  --}}
 <li
-@if (Route::is('dashboard.categories.index')) class="active" @endif
+@if (Route::is('dashboard.categories.*')) class="active" @endif
+
  ><a href="{{ route('dashboard.categories.index') }}"> <i class="fas fa-braille"></i> <span>@lang('site.CATEGORIES')</span></a>
 </li>
 @if (Auth::user()->hasPermission('orders-read'))
@@ -33,7 +34,7 @@
 
 @if (Auth::user()->hasPermission('products-read'))
 <li
-@if (Route::is('dashboard.products.index')) class="active" @endif
+@if (Route::is('dashboard.products.*')) class="active" @endif
  ><a href="{{ route('dashboard.products.index') }}"> <i class="fas fa-cart-plus"></i> <span>@lang('site.PRODUCTS')</span></a>
 </li>
 @endif
@@ -42,7 +43,7 @@
 
 @if (Auth::user()->hasPermission('customers-read'))
 <li
-@if (Route::is('dashboard.customers.index')) class="active" @endif
+@if (Route::is('dashboard.customers.*')) class="active" @endif
  ><a href="{{ route('dashboard.customers.index') }}"> <i class="fas fa-users"></i><span>@lang('site.CUSTOMERS')</span></a>
 </li>
 @endif
@@ -53,7 +54,7 @@
 
 @if (Auth::user()->hasPermission('orders-read'))
 <li
-@if (Route::is('dashboard.orders.index')) class="active" @endif
+@if (Route::is('dashboard.orders.*')) class="active" @endif
  ><a href="{{ route('dashboard.orders.index') }}"><i class="fas fa-sort-amount-up-alt"></i> <span>@lang('site.ORDERS')</span></a>
 </li>
 @endif

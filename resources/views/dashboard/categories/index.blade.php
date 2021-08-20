@@ -8,7 +8,7 @@
 
         <section class="content-header">
 
-            <h1>@lang('site.CATEGORIES')</h1>
+            <h1>@lang('site.main_categories')</h1>
 
             <ol class="breadcrumb">
                 <li><a href="{{ route('dashboard') }}"> <i class="fa fa-dashboard"></i>  @lang('site.DASHBOARD')</a></li>
@@ -45,7 +45,7 @@
 
                 </div>
 
-                <div class="box-bod">
+                <div class="box-body">
 
 
 
@@ -56,8 +56,6 @@
                             <tr>
                                 <th>@lang('site.id')</th>
                                 <th>@lang('site.name')</th>
-                                <th>@lang('site.products_count')</th>
-                                <th>@lang('site.related_products')</th>
                                 <th>@lang('site.action')</th>
 
                             </tr>
@@ -72,10 +70,10 @@
                                 <td> {{$category->id }}</td>
 
                                 <td> {{$category->name }}</td>
-                                <td> {{$category-> products_count }}</td>
-                                <td> <a class="btn btn-info" href="{{ route('dashboard.products.index',['category_id'=> $category->id]) }}">@lang('site.related_products')</a></td>
 
                                 <td>
+
+                                <a class="btn btn-success" href="{{ route('dashboard.sub_categories',$category->id ) }}"> @lang('site.sub_categories')</a>
                                 @if (Auth::user()->isAbleTO('categories-update'))
                                 <a href="{{ route('dashboard.categories.edit',$category->id ) }}" class="btn btn-primary btn-sm"> <i class="far fa-edit"></i>  @lang('site.edit')</a>
                                 @else

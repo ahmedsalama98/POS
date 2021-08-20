@@ -92,7 +92,16 @@ return [
     'id'=>'id',
     'let_pass_empty'=>'let the password field empty if you dont want change it',
     'date'=>'Date',
-    'create_order_to'=>'Create Order To '
+    'create_order_to'=>'Create Order To ',
+    'items'=>'Items',
+    'add_customer'=>'Add Customer',
+    'previous_customer_order'=>'Previous Customer Order',
+    'main_category'=>' Main Category',
+    'main_categories'=>'Main Categories',
+    'parent_category'=>'Parent Category',
+    'sub_categories'=>'Sub Categories',
+    'sales_graph'=>'Sales Graph',
+
 
 
 

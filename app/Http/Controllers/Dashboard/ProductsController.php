@@ -56,7 +56,7 @@ class ProductsController extends Controller
     public function create()
 
     {
-        $categories = Category::all();
+        $categories = Category::whereNull('parent_id')->whereHas('sub_categories')->with('sub_categories')->get();
 
         return view($this->path. 'create' , compact('categories'));
     }
@@ -141,7 +141,8 @@ class ProductsController extends Controller
     {
 
         $product =Product::with('category')->findOrFail($id);
-        $categories = Category::all();
+        $categories = Category::whereNull('parent_id')->whereHas('sub_categories')->with('sub_categories')->get();
+
         return view($this->path. 'edit' ,compact('categories' , 'product' ));
     }
 

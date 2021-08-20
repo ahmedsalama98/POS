@@ -41,10 +41,21 @@
                             <input type="text" name="en_name" id="en_name" class="form-control" value="{{ $category->en_name}}">
 
                         </div>
+{{--  parent id --}}
+                        <div class="form-group">
+                            <label for="parent_id">@lang('site.parent_category')</label>
+                            <select  name="parent_id" id="parent_id" class="form-control" value="{{ old('parent_id') }}">
+                                <option value=""> @lang('site.main_category')</option>
+                                @foreach ($categories as $parent_category )
+                                <option {{$category->parent_id== $parent_category->id  ?'selected':''}} value="{{ $parent_category->id }}"> {{ $parent_category->name }}</option>
+                                @endforeach
+                            </select>
+
+                        </div>
 
 {{-- submit'  --}}
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary">@lang('site.add')</button>
+                            <button type="submit" class="btn btn-primary"> <i class="fas fa-edit"></i> @lang('site.edit')</button>
                         </div>
 
                     </form>

@@ -6,12 +6,23 @@
 
     <div class="content-wrapper">
 
+        <section class="content-header">
+
+            <h1>@lang('site.customers') </h1>
+
+            <ol class="breadcrumb">
+                <li><a href="{{ route('dashboard') }}"> <i class="fa fa-dashboard"></i>  @lang('site.DASHBOARD')</a></li>
+                <li class="active"> @lang('site.customers')</li>
+            </ol>
+        </section>
+
         <section class="content">
 
 
             <div class="box box-primary">
                 @include('partials._errors')
                 <div class="box-header with-border">
+
                     <form action="{{ route('dashboard.customers.index') }}">
                         <div class="row">
                             <div class="col-md-4">
@@ -22,7 +33,7 @@
                             <button class="btn btn-primary"><i class="fas fa-search"></i> @lang('site.search') </button>
 
                             @if (Auth::user()->isAbleTO('customers-create'))
-                            <a href="{{ route('dashboard.customers.create') }}" class="btn btn-success"> <i class="fas fa-plus"></i> @lang('site.add')</a>
+                            <a href="{{ route('dashboard.customers.create') }}" class="btn btn-success"><i class="fas fa-plus"></i> @lang('site.add_customer')</a>
                             @else
                             <button class="btn btn-success disabled"> <i class="fas fa-plus"></i> @lang('site.add')</button>
                             @endif
@@ -67,10 +78,10 @@
 
                                 <td>
                                     @if (Auth::user()->isAbleTO('orders-create'))
-                                    <a href="{{ route('dashboard.orders.create',$customer->id ) }}" class="btn btn-primary btn-sm"> <i class="fas fa-plus"></i>  @lang('site.add_order')</a>
+                                    <a href="{{ route('dashboard.orders.create',$customer->id ) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i>  @lang('site.add_order')</a>
                                     @else
 
-                                     <button class="btn btn-primary btn-sm disabled"> <i class="far fa-edit"></i>  @lang('site.add_order')</button>
+                                     <button class="btn btn-primary btn-sm disabled"><i class="far fa-edit"></i>  @lang('site.add_order')</button>
 
                                     @endif
 

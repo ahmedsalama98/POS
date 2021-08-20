@@ -93,7 +93,17 @@ return [
     'id'=>'اي دي',
     'let_pass_empty'=>'اترك حقل كلمة المرور فارغه اذا لم ترد ان تغيره',
     'date'=>'التاريخ',
-    'create_order_to'=>' اضافه طلب ل'
+    'create_order_to'=>' اضافه طلب ل',
+    'items'=>'العناصر',
+    'add_customer'=>'اضافة عميل',
+    'previous_customer_order'=>'طلبات العميل السابقه',
+    'main_category'=>'قسم رئيسي',
+    'main_categories'=>'الاقسام الرئيسية',
+    'parent_category'=>'القسم الاب',
+    'sub_categories'=>'الاقسام المتفرعة',
+    'sales_graph'=>'    الرسم البياني للمبيعات',
+
+
 
 
 

@@ -9,6 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{--<!-- Bootstrap 3.3.7 -->--}}
+
+    <link rel="icon" href="{{ asset('dashboard_files/img/POS.jpg') }}" >
     <link rel="stylesheet" href="{{ asset('dashboard_files/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_files/css/ionicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('dashboard_files/css/skin-blue.min.css') }}">
@@ -62,9 +64,8 @@
     <header class="main-header">
 
         {{--<!-- Logo -->--}}
-        <a href="{{ asset('dashboard') }}/index2.html" class="logo">
+        <a href="{{ asset('dashboard') }}" class="logo">
             {{--<!-- mini logo for sidebar mini 50x50 pixels -->--}}
-            <span class="logo-mini"><b>A</b>LT</span>
             <span class="logo-lg">{{ config('app.name') }}</span>
         </a>
 
@@ -215,11 +216,9 @@
     @include('partials._session')
 
     <footer class="main-footer">
-        <div class="pull-right hidden-xs">
-            <b>Version</b> 2.4.0
-        </div>
-        <strong>Copyright &copy; 2014-2016
-            <a href="https://adminlte.io">Almsaeed Studio</a>.</strong> All rights
+
+        <strong>Copyright &copy; 2021
+            <a href="https://github.com/ahmedsalama98?tab=repositories">Ahmed Salama</a>.</strong> All rights
         reserved.
     </footer>
 

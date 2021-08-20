@@ -33,8 +33,8 @@
                                     <div class="col-md-4">
                                     <button class="btn btn-primary"><i class="fas fa-search"></i> @lang('site.search') </button>
 
-                                    @if (Auth::user()->isAbleTO('customers-create'))
-                                    <a href="{{ route('dashboard.customers.create') }}" class="btn btn-success"> <i class="fas fa-plus"></i> @lang('site.add')</a>
+                                    @if (Auth::user()->isAbleTO('orders-create'))
+                                    <a href="{{ route('dashboard.customers.index') }}" class="btn btn-success"> <i class="fas fa-plus"></i> @lang('site.add_order')</a>
                                     @else
                                     <button class="btn btn-success disabled"> <i class="fas fa-plus"></i> @lang('site.add')</button>
                                     @endif
@@ -67,8 +67,8 @@
                                       <td>
                                               {{ $order->items_names }} 
                                       </td>
-                                      <td>  {{ $order->total_price }}</td>
-                                      <td>  {{ $order->created_at->format('Y-m-d') }}</td>
+                                      <td>  {{ number_format($order->total_price  ,2)}}</td>
+                                      <td>  {{ $order->created_at->toFormattedDateString() }}</td>
 
                                       <td>
 
@@ -76,7 +76,7 @@
 
                                       <form class="show-order-form" style="display: inline-block" action="{{ route('dashboard.orders.show',$order->id ) }}">
                                        @csrf
-                                       <button type="submit" class="btn btn-success"> </i> @lang('site.show')</button>
+                                       <button type="submit" class="btn btn-success"> </i> <i class="fas fa-eye"></i>  @lang('site.show')</button>
                                       </form>
 
 
@@ -91,11 +91,11 @@
                                       <form   class="delete" style="display: inline-block" method="POST" action="{{ route('dashboard.orders.destroy',$order->id ) }}">
                                           @csrf
                                           @method('DELETE')
-                                          <button type="subnit" class="btn btn-danger"> <i class="fas fa-edit"></i> @lang('site.delete')</button>
+                                          <button type="subnit" class="btn btn-danger"> <i class="fas fa-trash"></i> @lang('site.delete')</button>
 
                                       </form>
                                       @else
-                                      <button  class="btn btn-danger disabled"> <i class="fas fa-trsh"></i> @lang('site.delete')</button>
+                                      <button  class="btn btn-danger disabled"> <i class="fas fa-trash"></i> @lang('site.delete')</button>
                                       @endif
 
                                   </td>
@@ -135,14 +135,29 @@
                                     </tr>
                                 </thead>
 
+                                <tbody>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <strong><p style="margin-top:50px"> @lang('site.total') : <span class="total-amount"> 0 </span></p></strong>
+                                        </td>
+                                    </tr>
+                               </tfoot>
+
                             </table>
 
                            <div class="box-footer">
-                            <strong><p style="margin-top:50px"> @lang('site.total') : <span class="total-amount"> 0 </span></p></strong>
+                            <div class="lds-roller" ><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 
 
-                            <button  class="btn btn-primary btn-block disabled"> <i class="fas fa-edit"></i> @lang('site.edit')</button>
-                           </div>
+
+
+                            <button  class="btn btn-primary btn-block disabled"> <i class="fas fa-print"></i> @lang('site.print')</button>
+                          
+
+                        </div>
 
 
                         </div>

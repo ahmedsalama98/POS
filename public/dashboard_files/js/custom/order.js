@@ -1,9 +1,15 @@
 $(document).ready(function() {
 
         calculateTotal()
-            // add order
 
 
+        // $('.delete_item').each(function() {
+
+        //     let id = $(this).attr('data-item');
+        //     $('#add-' + id).removeClass('btn-success').addClass('disabled btn-default');
+
+        // });
+        // add order
         $('.add_to_order').on('click', function(e) {
             if (!$(this).hasClass('disabled')) {
                 let id = $(this).data('id'),
@@ -11,7 +17,7 @@ $(document).ready(function() {
                     price = $(this).data('price');
 
 
-                $(this).removeClass('btn-primary').addClass('disabled btn-default')
+                $(this).removeClass('btn-success').addClass('disabled btn-default')
                     // <input type="hidden"  value="${id}" name="product_ids[]">
 
                 $product = `<tr class="order_item">
@@ -24,11 +30,6 @@ $(document).ready(function() {
                 $('.order_box').append($product);
                 calculateTotal()
             }
-
-
-
-
-
 
         });
 
@@ -54,6 +55,19 @@ $(document).ready(function() {
             calculateTotal()
         })
 
+
+
+        $('body').on('click', '#print', function() {
+
+            $('#show-order table').printThis({
+                debug: true, // show the iframe for debugging
+                importCSS: true, // import parent page css
+                importStyle: true, // import style tags
+                printContainer: true, // print outer container/$.selector
+                removeInline: false, // remove inline styles from print elements
+                removeInlineSelector: "*",
+            })
+        })
 
     }) //end of onready
 
@@ -81,13 +95,15 @@ function calculateTotal() {
 
 }
 
-
+//show order with ajax
 let showOrderForma = Array.from(document.querySelectorAll('.show-order-form'));
 
 showOrderForma.forEach((form) => {
     form.addEventListener('submit', function(event) {
 
-        event.preventDefault()
+        event.preventDefault();
+        let loader = document.querySelector('.lds-roller');
+        loader.style.display = 'block';
 
         fetch(event.target.action, {
                 method: 'Get',
@@ -95,9 +111,13 @@ showOrderForma.forEach((form) => {
             .then(res => res.json())
             .then((res) => {
                 console.log(event.target.action)
+
+
                 let orderbox = document.getElementById('show-order');
 
+
                 orderbox.innerHTML = res.data;
+                loader.style.display = 'none';
             })
             .catch(error => {
 

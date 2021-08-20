@@ -61,8 +61,14 @@
 
                             <select class="form-control select2" style="width: 100%;" name="category_id">
                                 <option value="">...</option>
-                                @foreach ( $categories as $category)
-                                <option {{ old('category_id')== $category->id  ? 'selected':''}} value="{{ $category->id }}">{{ $category->name }}</option>
+                                @foreach ( $categories as $parent_category)
+
+                                      <optgroup label="{{ $parent_category->name }}">
+                                        @forelse ($parent_category->sub_categories as $sub_category )
+                                        <option {{ old('category_id')== $sub_category->id  ? 'selected':''}} value="{{ $sub_category->id }}">{{ $sub_category->name }}</option>
+                                        @empty
+                                        @endforelse
+                                      </optgroup>
                                 @endforeach
                             </select>
 

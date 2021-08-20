@@ -1,6 +1,6 @@
 @extends('layouts.dashboard.dashboard-master')
 @section('title' )
-@lang('site.PRODUCTS')
+@lang('site.CATEGORIES')
 @endsection
 @section('content')
 
@@ -8,11 +8,11 @@
 
         <section class="content-header">
 
-            <h1>@lang('site.PRODUCTS') </h1>
+            <h1>{{ $parent_category->name }} @lang('site.sub_categories')</h1>
 
             <ol class="breadcrumb">
                 <li><a href="{{ route('dashboard') }}"> <i class="fa fa-dashboard"></i>  @lang('site.DASHBOARD')</a></li>
-                <li class="active"> @lang('site.PRODUCTS')</li>
+                <li class="active"> @lang('site.CATEGORIES')</li>
             </ol>
         </section>
 
@@ -22,28 +22,17 @@
             <div class="box box-primary">
                 @include('partials._errors')
                 <div class="box-header with-border">
-                    <form action="{{ route('dashboard.products.index') }}">
+                    <form action="{{ route('dashboard.sub_categories',$parent_category->id ) }}">
                         <div class="row">
                             <div class="col-md-4">
                             <input  value="{{ request()->search }}" type="text" name="search" class="form-control" placeholder="@lang('site.search')">
 
                             </div>
-
-                            <div class="col-md-4">
-
-                                <select class="form-control select2" style="width: 100%;" name="category_id">
-                                    <option value="">@lang('site.all_categories')</option>
-                                    @foreach ( $categories as $category)
-                                    <option {{ request()->category_id== $category->id  ? 'selected':''}} value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
                             <div class="col-md-4">
                             <button class="btn btn-primary"><i class="fas fa-search"></i> @lang('site.search') </button>
 
-                            @if (Auth::user()->isAbleTO('products-create'))
-                            <a href="{{ route('dashboard.products.create') }}" class="btn btn-success"> <i class="fas fa-plus"></i> @lang('site.add')</a>
+                            @if (Auth::user()->isAbleTO('categories-create'))
+                            <a href="{{ route('dashboard.categories.create') }}" class="btn btn-success"> <i class="fas fa-plus"></i> @lang('site.add')</a>
                             @else
                             <button class="btn btn-success disabled"> <i class="fas fa-plus"></i> @lang('site.add')</button>
                             @endif
@@ -56,24 +45,19 @@
 
                 </div>
 
-                <div class="box-bod">
+                <div class="box-body">
 
 
 
-                    @if (count($products))
+                    @if (count($categories))
                     <table class="table table-bordered" style="overflow: auto">
 
                         <thead>
                             <tr>
                                 <th>@lang('site.id')</th>
-                                <th> @lang('site.image')</th>
                                 <th>@lang('site.name')</th>
-                                <th>@lang('site.description')</th>
-                                <th>@lang('site.purchase_price')</th>
-                                <th>@lang('site.sale_price')</th>
-                                <th>@lang('site.profit_percent') %</th>
-                                <th>@lang('site.stock')</th>
-                                <th>@lang('site.category')</th>
+                                <th>@lang('site.products_count')</th>
+                                <th>@lang('site.related_products')</th>
                                 <th>@lang('site.action')</th>
 
                             </tr>
@@ -82,32 +66,27 @@
                         <tbody>
 
 
-                            @foreach ($products as $product)
+                            @foreach ($categories as $category)
 
                             <tr>
-                                <td> {{$product->id }}</td>
-                                <th> <img class=" img-thumbnail" style="width: 100px" src="{{ $product->image_path}}" alt=""></th>
-                                <td> {{$product->name }}</td>
+                                <td> {{$category->id }}</td>
 
-                                <td> {!! $product->description !!} </td>
-                                <td> {{   number_format( $product->purchese_price ,2)  }} </td>
-                                <td> {{ number_format( $product->sale_price  ,2) }}</td>
-                                <td> {{$product->profit_percent }}%</td>
-                                <td> {{$product->stock }}</td>
-                                <td> {{$product->category_name }}</td>
-
+                                <td> {{$category->name }}</td>
+                                <td> {{$category-> products_count }}</td>
+                                <td> <a class="btn btn-info" href="{{ route('dashboard.products.index',['category_id'=> $category->id]) }}">@lang('site.related_products')</a></td>
 
                                 <td>
-                                @if (Auth::user()->isAbleTO('products-update'))
-                                <a href="{{ route('dashboard.products.edit',$product->id ) }}" class="btn btn-primary btn-sm"> <i class="far fa-edit"></i>  @lang('site.edit')</a>
+
+                                @if (Auth::user()->isAbleTO('categories-update'))
+                                <a href="{{ route('dashboard.categories.edit',$category->id ) }}" class="btn btn-primary btn-sm"> <i class="far fa-edit"></i>  @lang('site.edit')</a>
                                 @else
 
                                  <button class="btn btn-primary btn-sm disabled"> <i class="far fa-edit"></i>  @lang('site.edit')</button>
 
                                 @endif
 
-                                @if (Auth::user()->isAbleTO('products-delete'))
-                                <form  class="delete" style="display:inline-block" action="{{ route('dashboard.products.destroy',$product->id ) }}" method="POST">
+                                @if (Auth::user()->isAbleTO('categories-delete'))
+                                <form  class="delete" style="display:inline-block" action="{{ route('dashboard.categories.destroy',$category->id ) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger btn-sm "> <i class="far fa-trash-alt"></i> @lang('site.delete')</button>
@@ -132,7 +111,7 @@
 
                         </table>
 
-                        {!! $products->appends(request()->query())->links('pagination::bootstrap-4')!!}
+                        {!! $categories->appends(request()->query())->links('pagination::bootstrap-4')!!}
 
 
                     @else
@@ -150,7 +129,6 @@
 
 
     </section><!-- end of content -->
-
 
     </div><!-- end of content wrapper -->
 

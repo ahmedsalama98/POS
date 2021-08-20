@@ -32,7 +32,6 @@ class OrdersController extends Controller
         })
         ->with('products', 'customer')->latest()->paginate(5);
 
-
         return view($this->path. 'index' ,compact('orders'));
     }
 
@@ -40,9 +39,14 @@ class OrdersController extends Controller
     public function create(Customer $customer )
     {
 
-        $categories = Category::with('products')->get();
+        $categories = Category::whereHas('sub_categories',function($q){
+            return $q->whereHas('products');
+        })->with(['sub_categories'=>function($q){
+            return $q->with('products');
+        }])->get();
 
-        return view($this->path. 'create' ,compact('customer' ,'categories'));
+        $orders = $customer->orders;
+        return view($this->path. 'create' ,compact('customer' ,'categories','orders'));
     }
 
 
@@ -90,11 +94,17 @@ class OrdersController extends Controller
     public function edit($id)
 
     {
-        $categories = Category::with('products')->get();
+        $categories = Category::whereHas('sub_categories',function($q){
+            return $q->whereHas('products');
+        })->with(['sub_categories'=>function($q){
+            return $q->with('products');
+        }])->get();
 
         $order = Order::with('products')->findOrFail($id);
 
-        return view($this->path. 'edit' ,compact('order' ,'categories'));
+        $customer_orders =Customer::findOrFail($order->customer_id)->orders;
+
+        return view($this->path. 'edit' ,compact('order' ,'categories' ,'customer_orders'));
 
 
     }
@@ -108,26 +118,35 @@ class OrdersController extends Controller
 
         'products'=>'required|array',
     ]);
+    $total_price =0;
 
+    foreach($request->products as $id=> $quantity){
 
+        $product = Product::whereHas('orders')->findOrFail($id);
+        $quantity =$quantity['quantity'];
+        $total_price += $quantity * $product->sale_price;
+
+        foreach($order->products as $order_product){
+            if($order_product->id ==$product->id){
+                $pivot_quantity =$order_product->pivot->quantity;
+
+                if( $quantity > $pivot_quantity){
+                    $product->stock =$product->stock - ( $quantity  -$pivot_quantity);
+                }elseif($quantity < $pivot_quantity){
+                    $product->stock =$product->stock + ($pivot_quantity - $quantity  );
+                }
+            }
+        }
+        if($product->stock < 1){
+            $product->status =0;
+        }
+        $product->save();
+    }
 
     $order->products()->sync($request->products);
 
-    $total_price =0;
-    foreach($request->products as $id=> $quantity){
 
-        $product = Product::findOrFail($id);
-        $quantity =$quantity['quantity'];
-        $total_price += $quantity * $product->sale_price;
-        $product->stock =$product->stock -$quantity;
 
-        if($product->stock < 1){
-            $product->status =0;
-
-        }
-        $product->save();
-        // $order->products()->attach($product , ['quantity'=>$quantity]);
-    }
 
     $order->total_price =$total_price;
     $order->save();
@@ -140,6 +159,10 @@ class OrdersController extends Controller
     public function destroy(Order $order)
     {
 
+        foreach($order->products  as $product){
+            $product->stock = $product->stock +  $product->pivot->quantity;
+            $product->save();
+        };
         $order->delete();
         return redirect()->back()->with('success', trans('site.deleted_successfully'));
 
@@ -149,6 +172,7 @@ class OrdersController extends Controller
 
 
         $order = Order::with('products')->findOrFail($id);
+
 
 
         $view = view($this->path . '_show', compact('order'))->render();

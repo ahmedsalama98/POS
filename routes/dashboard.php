@@ -52,6 +52,8 @@ Route::group(
 
                 Route::resource('categories', CatergoriesController::class)->except('show');
 
+                Route::get('categories/{parent_id}/sub_categories', [CatergoriesController::class, 'subCategories'])->name('sub_categories');
+
              //products routes
 
                 Route::resource('products', ProductsController::class)->except('show');

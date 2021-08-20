@@ -44,20 +44,28 @@
                     {{--  <script>
                         CKEDITOR.replace( 'editor1' );
                     </script>  --}}
-@endforeach
+                    @endforeach
+
+{{--  category'  --}}
 
 
-                        <div class="form-group">
-                            <label >@lang('site.all_categories')</label>
+                    <div class="form-group">
+                        <label >@lang('site.all_categories')</label>
 
-                            <select class="form-control select2" style="width: 100%;" name="category_id">
-                                <option value="">...</option>
-                                @foreach ( $categories as $category)
-                               <option  {{ $product->category->id== $category->id  ? 'selected':''}} value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
+                        <select class="form-control select2" style="width: 100%;" name="category_id">
+                            <option value="">...</option>
+                            @foreach ( $categories as $parent_category)
 
-                        </div>
+                                <optgroup label="{{ $parent_category->name }}">
+                                    @forelse ($parent_category->sub_categories as $sub_category )
+                                    <option {{ old('category_id')== $sub_category->id  ? 'selected':''}} value="{{ $sub_category->id }}">{{ $sub_category->name }}</option>
+                                    @empty
+                                    @endforelse
+                                </optgroup>
+                            @endforeach
+                        </select>
+
+                    </div>
 {{--  image  --}}
 
 

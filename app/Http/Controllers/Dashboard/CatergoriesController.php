@@ -24,19 +24,26 @@ class CatergoriesController extends Controller
     public function index(Request $request)
     {
 
-        $name =app()->currentLocale(). '_name';
-        $categories = Category::when($request->search, function($query) use ($request){
-            $query->where('ar_name' , 'like','%'. $request->search .'%')
-           -> orWhere('en_name' , 'like', '%'. $request->search .'%');
+        $categories = Category::whereNull('parent_id')->when($request->search, function($query) use ($request){
+            $query
+            ->where('ar_name' , 'like','%'. $request->search .'%')
+        -> orWhere('en_name' , 'like', '%'. $request->search .'%')
+        ->whereNull('parent_id');
         })
+        ->with('sub_categories')
         ->latest()->paginate(5);
+
+
         return view($this->path. 'index', compact('categories'));
     }
 
 
     public function create()
     {
-        return view($this->path. 'create');
+
+        $categories= Category::whereNull('parent_id')->get();
+
+        return view($this->path. 'create' , compact('categories'));
     }
 
 
@@ -55,6 +62,9 @@ class CatergoriesController extends Controller
         $category = new Category();
         $category->ar_name = $request->ar_name;
         $category->en_name = $request->en_name;
+        if($request->input('parent_id')){
+            $category->parent_id = $request->parent_id;
+        }
         $category->save();
 
 
@@ -68,10 +78,10 @@ class CatergoriesController extends Controller
     public function edit($id)
 
     {
-
-
         $category = Category::findOrFail($id);
-        return view($this->path. 'edit' , compact('category'));
+        $categories= Category::whereNull('parent_id')->get();
+
+        return view($this->path. 'edit' , compact('category','categories'));
     }
 
 
@@ -95,6 +105,8 @@ class CatergoriesController extends Controller
 
             $category->ar_name = $request->ar_name;
             $category->en_name = $request->en_name;
+            $category->parent_id = $request->parent_id;
+
             $category->save();
 
 
@@ -108,7 +120,27 @@ class CatergoriesController extends Controller
         $category->delete();
 
         return redirect()->route('dashboard.categories.index')->with('success', trans('site.deleted_successfully'));
+    }
 
+
+    public function subCategories( Request $request, $parent_id){
+
+
+        $parent_category =Category::whereNull('parent_id')->findOrFail($parent_id);
+        $categories = Category::whereNotNull('parent_id')
+        ->where('parent_id' , $parent_id)
+        ->when($request->search, function($query) use ($request , $parent_id){
+            $query
+                  ->where('ar_name' , 'like','%'. $request->search .'%')
+                  -> orWhere('en_name' , 'like', '%'. $request->search .'%')
+                  ->where('parent_id' , $parent_id)
+                  ->whereNotNull('parent_id');
+        })
+
+        ->latest()->paginate(5);
+
+
+        return view($this->path. 'sub_categories', compact('categories','parent_category'));
 
     }
 }

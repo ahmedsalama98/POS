@@ -14,22 +14,25 @@
         <tr class="order_item">
             <td>{{ $product-> name }}</td>
             <td> {{  $product->pivot->quantity }}</td>
-            <td class="item_price" data-price="{{ $product-> sale_price }}"> {{ $product-> sale_price * $product->pivot->quantity }}</td>
+            <td class="item_price" data-price="{{ $product-> sale_price }}"> {{ number_format($product-> sale_price * $product->pivot->quantity,2) }}</td>
         </tr>
         @endforeach
 
      </tbody>
-
+     <tfoot>
+          <tr>
+              <td>
+                <strong><p style="margin-top:50px"> @lang('site.total') : <span class="total-amount"> {{number_format($order->total_price ,2) }} </span></p></strong>
+              </td>
+          </tr>
+     </tfoot>
  </table>
 
 <div class="box-footer">
- <strong><p style="margin-top:50px"> @lang('site.total') : <span class="total-amount"> {{ $order->total_price }} </span></p></strong>
+    <div class="lds-roller" ><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 
- @if (Auth::user()->hasPermission('orders-update'))
- <a href="{{ route('dashboard.orders.edit',$order->id ) }}" class="btn btn-primary btn-block"> <i class="fas fa-edit"></i> @lang('site.edit')</a>
-@else
- <button  class="btn btn-primary disabled"> <i class="fas fa-edit"></i> @lang('site.edit')</button>
- @endif
+ <button id="print" class="btn btn-primary btn-block"> <i class="fas fa-print"></i> @lang('site.print')</button>
+
 </div>
 
 
